@@ -1,0 +1,24 @@
+server:
+  port: 1013
+spring:
+  application:
+    name: category-services
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/category_db
+    username: ${POSTGRES_USER}
+    password: ${POSTGRES_PASSWORD}
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+    register-with-eureka: true
+  instance:
+    prefer-ip-address: true
+    ip-address: localhost
+
+
+jwt:
+  secretKey: cdfd*@nj!ivnsdxbnfuibrdefucv*&*UIdncmok343(@o23vmfdbkmvfbjijcvnkzxfnjcnendrjngiringfivggbfgbgfgmw1bokr(tgmr&!efvnibtrg
+  expiration: 8400000

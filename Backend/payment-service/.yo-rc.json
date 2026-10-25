@@ -1,0 +1,12 @@
+{
+  "generator-springboot": {
+    "appName": "payment-service",
+    "packageName": "com.vinay.payment_service",
+    "databaseType": "mysql",
+    "dbMigrationTool": "liquibase",
+    "features": [],
+    "buildTool": "maven",
+    "packageFolder": "com/vinay/payment_service",
+    "liquibaseMigrationCounter": 1
+  }
+}

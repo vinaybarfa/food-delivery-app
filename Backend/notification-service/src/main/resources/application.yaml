@@ -1,0 +1,66 @@
+server:
+  port: 1023
+
+spring:
+  application:
+    name: notification-service
+
+  kafka:
+    bootstrap-servers: localhost:9094 # using Docker
+
+    consumer:
+      group-id: notification-group
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+
+      properties:
+        spring.json.trusted.packages: "*"
+        spring.json.value.default.type: com.notification_service.model.Transaction
+
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+
+  data:
+    mongodb:
+      uri: mongodb://admin:admin123@localhost:27018/notification_db?authSource=admin
+
+notification:
+  kafka:
+    topic: payment-completed
+
+logging:
+  level:
+    org.springframework.kafka: INFO
+    com.notification_service: DEBUG
+
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+    register-with-eureka: true
+  instance:
+    prefer-ip-address: true
+    ip-address: localhost
+
+#  datasource:
+#    url: jdbc:h2:mem:notificationdb
+#    driver-class-name: org.h2.Driver
+#    username: sa
+#    password:
+
+
+#  h2:
+#    console:
+#      enabled: true
+#      path: /h2-console
+#
+#
+#  jpa:
+#    hibernate:
+#      ddl-auto: update
+#    show-sql: true
+#    database-platform: org.hibernate.dialect.H2Dialect
+

@@ -1,0 +1,33 @@
+server:
+  port: 1015
+spring:
+  application:
+    name: ingredient-services
+  datasource:
+    url: jdbc:mysql://localhost:3306/ingredient_db
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+logging:
+  level:
+    org.hibernate.orm.jdbc.bind: trace
+jwt:
+  secretKey: cdfd*@nj!ivnsdxbnfuibrdefucv*&*UIdncmok343(@o23vmfdbkmvfbjijcvnkzxfnjcnendrjngiringfivggbfgbgfgmw1bokr(tgmr&!efvnibtrg
+  expiration: 8400000
+
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+    register-with-eureka: true
+  instance:
+    prefer-ip-address: true
+    ip-address: localhost

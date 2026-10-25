@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
+
+    <property name="string.type" value="varchar(255)" dbms="!postgresql"/>
+    <property name="string.type" value="text" dbms="postgresql"/>
+
+    <changeSet author="vinay" id="createTable-customers">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <sequenceExists sequenceName="customers_seq" schemaName="payment"/>
+                <tableExists tableName="customers" schemaName="payment"/>
+            </not>
+        </preConditions>
+
+        <!-- Create sequence in the payment schema -->
+        <createSequence schemaName="payment"
+                        sequenceName="customers_seq"
+                        incrementBy="1"
+                        startValue="1"
+        />
+
+        <!-- Create the table in the payment schema -->
+        <createTable tableName="customers" schemaName="payment">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" nullable="false" primaryKeyName="customers_pkey"/>
+            </column>
+            <column name="name" type="${string.type}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="email" type="${string.type}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="phone" type="${string.type}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="address" type="${string.type}"/>
+            <column name="amount_available" type="double"/>
+            <column name="amount_reserved" type="double"/>
+        </createTable>
+        <!-- Add unique constraint -->
+        <addUniqueConstraint tableName="customers" columnNames="name, email"
+                             constraintName="uc_customers_name_email_key" schemaName="payment"/>
+
+        <!-- Set default value for ID column -->
+        <sql>
+            ALTER TABLE payment.customers ALTER COLUMN id SET DEFAULT nextval('payment.customers_seq');
+        </sql>
+    </changeSet>
+</databaseChangeLog>

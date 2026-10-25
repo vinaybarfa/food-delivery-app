@@ -1,0 +1,59 @@
+server:
+  port: 1018
+
+spring:
+  application:
+    name: api-gateway
+
+  cloud:
+    config:
+      enabled: false
+
+    gateway:
+      server:
+        webflux:
+          discovery:
+            locator:
+              enabled: false
+
+          httpclient:
+            connect-timeout: 5000
+            response-timeout: 10s
+
+          default-filters:
+            - DedupeResponseHeader=Access-Control-Allow-Origin Access-Control-Allow-Credentials
+
+          routes:
+
+            - id: auth-service
+              uri: lb://AUTH-SERVICE
+              predicates:
+                - Path=/auth/**
+
+            - id: cart-service
+              uri: lb://CART-SERVICE
+              predicates:
+                - Path=/cart/**
+
+            - id: order-service
+              uri: lb://ORDER-SERVICE
+              predicates:
+                - Path=/orders/**
+  data:
+    redis:
+      host: localhost
+      port: 6379
+
+jwt:
+  secret-key: ${JWT_SECRET_KEY}
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"

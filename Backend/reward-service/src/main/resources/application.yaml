@@ -1,0 +1,52 @@
+server:
+  port: 1024
+
+spring:
+  application:
+    name: reward-services
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/reward_db
+    username: ${POSTGRES_USER}
+    password: ${POSTGRES_PASSWORD}
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    open-in-view: false
+
+  kafka:
+    bootstrap-servers: localhost:9094
+
+    consumer:
+      group-id: reward-group
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.deserializer.value.delegate.class: org.springframework.kafka.support.serializer.JsonDeserializer
+        spring.json.trusted.packages: "*"
+
+reward:
+  kafka:
+    topic: payment-completed
+
+logging:
+  level:
+    org.springframework.kafka: DEBUG
+    com.paypal.reward_service: DEBUG
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+    register-with-eureka: true
+  instance:
+    prefer-ip-address: true
+    ip-address: localhost
+
+jwt:
+  secret-key: ${JWT_SECRET_KEY}
+  access-token-expiration: ${ACCESS_JWT_EXPIRATION}
+  refresh-token-expiration: ${REFRESH_TOKEN_EXPIRATION}
